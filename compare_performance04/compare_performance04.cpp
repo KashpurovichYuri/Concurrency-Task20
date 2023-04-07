@@ -85,6 +85,7 @@ int main()
 
     std::cout << N << '\n' << M << '\n' << time1 << " c\n" << std::endl;
 
+    times.clear();
     for (auto i = 0; i < 100; ++i)
     {
         boost::thread_group producer_threads, consumer_threads;
