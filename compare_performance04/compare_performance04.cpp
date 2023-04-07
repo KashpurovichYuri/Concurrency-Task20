@@ -48,11 +48,11 @@ void consumer(Container & container, const unsigned int M, boost::atomic < bool 
 
 int main()
 {
-    const auto N = 8;
-    const unsigned int M = 1000000;
+    const auto N = 2;
+    const unsigned int M = 1000;
     std::vector < double > times;
     
-    for (auto i = 0; i < 8; ++i)
+    for (auto i = 0; i < 100; ++i)
     {
         boost::thread_group producer_threads, consumer_threads;
 
