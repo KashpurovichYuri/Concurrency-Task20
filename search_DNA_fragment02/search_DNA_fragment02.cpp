@@ -61,11 +61,11 @@ auto search_substr(
 		{
 			std::scoped_lock lock(mutex); // we also may use just mutex.lock() and mutex.unlock() to block emplace operation
 			ind.emplace(pos);
-			pos += substr.size();
+			pos += 1;
 		}
 		else
 			pos = right;
-		// we have also correctly process edges of string...
+		// we have also correctly process edges of string because find will search substr even out of right boundary (but with beginning till it)...
 	}
 }
 
@@ -121,7 +121,7 @@ auto par_search_subseq(
 
 int main()
 {
-
+	//auto DNA = "AAA";
 	auto DNA = "AGTCGGTATCTGATCGTTAGCTCGCGCTTGTTAGAGTCGCGATAGCGCCGCTGTATAGGAGATCTCTCTAGGAAACACTTTGCGATATAGCTCGTAGCTGATCGTCGGCTCGAGGCTAAGCTGAAAACAGGTACGGCAGATGCA";
 	//auto DNA = "GTAGTAGTAGTAGTAGTAGTA";
 	std::string subseq;
@@ -129,7 +129,6 @@ int main()
 
 	std::set < size_t > ind;
 	par_search_subseq(DNA, subseq, ind);
-	for (auto & index : ind)
+	for (auto index : ind)
 		std::cout << index << " ";
-
 }

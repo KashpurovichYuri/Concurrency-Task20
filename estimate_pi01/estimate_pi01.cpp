@@ -13,18 +13,23 @@ auto estimate_pi_seq_geom(const size_t N, size_t & Nin, size_t & Nout, std::mute
 	std::random_device seed;
 	std::uniform_real_distribution < double > distribution(-1, 1);
 	std::mt19937 engine(seed());
+	
+	size_t in = 0;
+	size_t out = 0;
 
 	for (auto i = 0; i < N; ++i)
 	{
-		//std::scoped_lock();
 		double x = distribution(engine);
 		double y = distribution(engine);
 
-		std::scoped_lock lock(mutex);
 		if (x * x + y * y < 1)
-			++Nin;
-		++Nout;
+			++in;
+		++out;
 	}
+
+	std::scoped_lock lock(mutex);
+	Nin += in;
+	Nout += out;
 }
 
 class Threads_Guard
@@ -107,7 +112,7 @@ double estimate_pi_par(const size_t N)
 
 int main()
 {
-	const size_t N = 1000000;
+	const size_t N = 10000000;
 	auto pi_par = estimate_pi_par(N);
 	std::cout << pi_par << std::endl;
 }

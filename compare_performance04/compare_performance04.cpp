@@ -48,11 +48,11 @@ void consumer(Container & container, const unsigned int M, boost::atomic < bool 
 
 int main()
 {
-    const auto N = 2;
-    const unsigned int M = 1000;
+    const auto N = 8;
+    const unsigned int M = 1000000;
     std::vector < double > times;
     
-    for (auto i = 0; i < 100; ++i)
+    for (auto i = 0; i < 10; ++i)
     {
         boost::thread_group producer_threads, consumer_threads;
 
@@ -82,30 +82,30 @@ int main()
         times.push_back(timer.get_time());
     }
     auto time1 = std::accumulate(std::begin(times), std::end(times), 0.0) / times.size();
-
+    
     std::cout << N << '\n' << M << '\n' << time1 << " c\n" << std::endl;
-
+    
     times.clear();
-    for (auto i = 0; i < 100; ++i)
+    for (auto i = 0; i < 10; ++i)
     {
         boost::thread_group producer_threads, consumer_threads;
 
-        Threadsafe_Queue < int > queue;
+        Threadsafe_Stack < int > stack;
 
         boost::atomic < bool > flag = false;
 
         Timer timer{ "operations in lock-free containers", std::cout };
         for (auto i = 0; i < N; ++i)
             producer_threads.create_thread(boost::bind(
-                producer < Threadsafe_Queue < int > >,
-                boost::ref(queue),
+                producer < Threadsafe_Stack < int > >,
+                boost::ref(stack),
                 M,
                 boost::ref(flag)));
 
         for (auto i = 0; i < N; ++i)
             consumer_threads.create_thread(boost::bind(
-                consumer < Threadsafe_Queue < int > >,
-                boost::ref(queue),
+                consumer < Threadsafe_Stack < int > >,
+                boost::ref(stack),
                 M,
                 boost::ref(flag)));
 
